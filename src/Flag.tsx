@@ -20,19 +20,25 @@ const Flag: React.FC<Props> = ({
   hasDropShadow = false,
   hasBorderRadius = true,
   className
-}: Props) => (
-  <div
-    className={
-      `flag
-    ${gradient}
-    size-${size}
-    ${hasBorder ? 'border' : ''}
-    ${hasDropShadow ? 'drop-shadow' : ''}
-    ${hasBorderRadius ? 'border-radius' : ''}
-    ${className ? className.replace(/\s\s+/g, ' ').trim() : ''}`
-    }>
-    <img src={require(`./flags/${size}/${code}.svg`)} />
-  </div>
-)
+}: Props) => {
+  const flagModule = require(`./flags/${size}/${code}.svg`);
+  // webpack, nextjs, and other build tools treat svg imports differently
+  const src = typeof flagModule.default === 'string' ? flagModule.default : flagModule.default.src;
+
+  return (
+    <div
+      className={
+        `flag
+      ${gradient}
+      size-${size}
+      ${hasBorder ? 'border' : ''}
+      ${hasDropShadow ? 'drop-shadow' : ''}
+      ${hasBorderRadius ? 'border-radius' : ''}
+      ${className ? className.replace(/\s\s+/g, ' ').trim() : ''}`
+      }>
+      <img src={src} />
+    </div>
+  )
+}
 
 export default Flag
